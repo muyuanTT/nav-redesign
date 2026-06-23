@@ -447,7 +447,7 @@
 .userInfo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin-left: 12px;
   padding-left: 16px;
   border-left: 1px solid #e5e7eb;
@@ -465,7 +465,7 @@
 .userDetail {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .userName {
@@ -631,8 +631,8 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  padding: 2px 8px 2px 16px;
-  border-radius: 12px;
+  padding: 6px 8px 6px 16px;
+  border-radius: 9999px;
   font-size: 13px;
   font-weight: 600;
   color: var(--primary);

@@ -487,6 +487,8 @@ export default function Navbar() {
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const roleDropdownRef = useRef<HTMLDivElement>(null);
+  const orgTooltipRef = useRef<HTMLDivElement>(null);
+  const orgLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = useCallback((key: string, el: HTMLAnchorElement | null) => {
     if (leaveTimeoutRef.current) {
@@ -822,7 +824,7 @@ export default function Navbar() {
               <span className={styles.userAccount}>账号：GILLION</span>
             </div>
           </div>
-          <button className={`${styles.headerBtn} ${styles.arrowBtn}`} title="角色切换">
+          <button className={`${styles.headerBtn} ${styles.arrowBtn}`} title="角色切换" onClick={toggleProfile}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={profileOpen ? styles.arrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
           </button>
         </div>
@@ -865,17 +867,17 @@ export default function Navbar() {
                           const rect = e.currentTarget.getBoundingClientRect();
                           const tooltipWidth = 220;
                           const tooltipHeight = 180;
-                          const gap = 8;
+                          const gap = -4;
                           const iconCenterY = rect.top + rect.height / 2;
 
-                          // 默认浮窗在图标左侧，箭头在浮窗右侧
-                          let x = rect.left - tooltipWidth - gap;
-                          let isLeft = true;
+                          // 默认浮窗在图标右侧，箭头在浮窗左侧
+                          let x = rect.right + gap;
+                          let isLeft = false;
 
-                          // 超出左边界，显示在右侧
-                          if (x < 10) {
-                            x = rect.right + gap;
-                            isLeft = false;
+                          // 超出右边界，显示在左侧
+                          if (x + tooltipWidth > window.innerWidth) {
+                            x = rect.left - tooltipWidth - gap;
+                            isLeft = true;
                           }
 
                           // 浮窗垂直居中于图标
@@ -896,7 +898,13 @@ export default function Navbar() {
 
                           setOrgTooltip({ roleId: role.id, x, y, arrowTop, isLeft });
                         }}
-                        onMouseLeave={() => setOrgTooltip(null)}
+                        onMouseLeave={() => {
+                          orgLeaveTimeoutRef.current = setTimeout(() => {
+                            if (!orgTooltipRef.current?.contains(document.activeElement as Node)) {
+                              setOrgTooltip(null);
+                            }
+                          }, 100);
+                        }}
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                           <rect x="2" y="2" width="8" height="6" rx="1"/>
@@ -937,8 +945,16 @@ export default function Navbar() {
           if (!role) return null;
           return (
             <div
+              ref={orgTooltipRef}
               className={styles.orgTooltip}
-              style={{ left: orgTooltip.x, top: orgTooltip.y }}
+              style={{ left: orgTooltip.x, top: orgTooltip.y, pointerEvents: 'auto' }}
+              onMouseEnter={() => {
+                if (orgLeaveTimeoutRef.current) {
+                  clearTimeout(orgLeaveTimeoutRef.current);
+                  orgLeaveTimeoutRef.current = null;
+                }
+              }}
+              onMouseLeave={() => setOrgTooltip(null)}
             >
               <div
                 className={`${styles.orgTooltipArrow} ${orgTooltip.isLeft ? styles.orgTooltipArrowRight : ''}`}
