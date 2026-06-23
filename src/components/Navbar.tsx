@@ -845,7 +845,6 @@ export default function Navbar() {
               <div className={styles.profileRoleHeader}>
                 <span className={styles.profileRoleLabel}>当前角色</span>
                 <div className={styles.profileRoleCurrent} onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}>
-                  <span>{roles.find(r => r.name === currentRole)?.icon}</span>
                   <span>{currentRole}</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={roleDropdownOpen ? styles.roleArrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
