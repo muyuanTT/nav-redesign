@@ -474,12 +474,12 @@ export default function Navbar() {
   const [currentRole, setCurrentRole] = useState('管理员');
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [roles, setRoles] = useState([
-    { id: 1, name: '管理员', org: '总部管理中心' },
-    { id: 2, name: '财务', org: '财务结算中心' },
-    { id: 3, name: '操作员', org: '运营操作中心' },
-    { id: 4, name: '客户', org: '客户服务中心' },
+    { id: 1, name: '管理员', orgs: ['总部管理中心', '深圳分公司', '上海分公司'] },
+    { id: 2, name: '财务', orgs: ['财务结算中心', '深圳分公司财务部'] },
+    { id: 3, name: '操作员', orgs: ['运营操作中心', '广州运营部', '上海运营部'] },
+    { id: 4, name: '客户', orgs: ['客户服务中心', '北京客服部'] },
   ]);
-  const [orgTooltip, setOrgTooltip] = useState<{ roleId: number; x: number; y: number } | null>(null);
+  const [orgTooltip, setOrgTooltip] = useState<{ roleId: number; x: number; y: number; arrowTop: number; isLeft: boolean } | null>(null);
   const [draggedRole, setDraggedRole] = useState<number | null>(null);
   const [dragOverRole, setDragOverRole] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
@@ -831,7 +831,7 @@ export default function Navbar() {
         {profileOpen && (
           <div className={styles.profileDropdown} ref={profileRef}>
             <div className={styles.profileDivider} />
-            <div className={styles.profileRoleSection}>
+            <div className={`${styles.profileRoleSection} ${roleDropdownOpen ? styles.profileRoleSectionOpen : ''}`}>
               <div className={styles.profileRoleHeader}>
                 <span className={styles.profileRoleLabel}>当前角色</span>
                 <div className={styles.profileRoleCurrent} onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}>
@@ -863,7 +863,38 @@ export default function Navbar() {
                         className={styles.roleOrgIcon}
                         onMouseEnter={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
-                          setOrgTooltip({ roleId: role.id, x: rect.right + 8, y: rect.top });
+                          const tooltipWidth = 220;
+                          const tooltipHeight = 180;
+                          const gap = 8;
+                          const iconCenterY = rect.top + rect.height / 2;
+
+                          // 默认浮窗在图标左侧，箭头在浮窗右侧
+                          let x = rect.left - tooltipWidth - gap;
+                          let isLeft = true;
+
+                          // 超出左边界，显示在右侧
+                          if (x < 10) {
+                            x = rect.right + gap;
+                            isLeft = false;
+                          }
+
+                          // 浮窗垂直居中于图标
+                          let y = iconCenterY - tooltipHeight / 2;
+
+                          // 超出下边界，向上偏移
+                          if (y + tooltipHeight > window.innerHeight) {
+                            y = window.innerHeight - tooltipHeight - 10;
+                          }
+
+                          // 超出上边界，向下偏移
+                          if (y < 10) {
+                            y = 10;
+                          }
+
+                          // 箭头中心指向图标中心（箭头高度14px，中心偏移7px）
+                          const arrowTop = Math.max(12, Math.min(iconCenterY - y - 7, tooltipHeight - 12));
+
+                          setOrgTooltip({ roleId: role.id, x, y, arrowTop, isLeft });
                         }}
                         onMouseLeave={() => setOrgTooltip(null)}
                       >
@@ -881,20 +912,8 @@ export default function Navbar() {
                   ))}
                 </div>
               )}
-              {orgTooltip && (
-                <div
-                  className={styles.orgTooltip}
-                  style={{ left: orgTooltip.x, top: orgTooltip.y }}
-                >
-                  <div className={styles.orgTooltipArrow} />
-                  <div className={styles.orgTooltipContent}>
-                    <span className={styles.orgTooltipLabel}>关联组织</span>
-                    <span className={styles.orgTooltipValue}>{roles.find(r => r.id === orgTooltip.roleId)?.org}</span>
-                  </div>
-                </div>
-              )}
             </div>
-            <div className={styles.profileDivider} />
+            <div className={`${styles.profileDivider} ${roleDropdownOpen ? styles.profileDividerHidden : ''}`} />
             <div className={styles.profileMenu}>
               <a href="#" className={styles.profileMenuItem} onClick={(e) => { e.preventDefault(); handleProfileMenuClick('个人设置'); }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -911,6 +930,51 @@ export default function Navbar() {
             </div>
           </div>
         )}
+
+        {/* Org Tooltip - rendered outside profileDropdown to avoid overflow:hidden clipping */}
+        {orgTooltip && (() => {
+          const role = roles.find(r => r.id === orgTooltip.roleId);
+          if (!role) return null;
+          return (
+            <div
+              className={styles.orgTooltip}
+              style={{ left: orgTooltip.x, top: orgTooltip.y }}
+            >
+              <div
+                className={`${styles.orgTooltipArrow} ${orgTooltip.isLeft ? styles.orgTooltipArrowRight : ''}`}
+                style={orgTooltip.isLeft ? { left: 'auto', right: -7, top: orgTooltip.arrowTop } : { left: -7, top: orgTooltip.arrowTop }}
+              />
+              <div className={styles.orgTooltipContent}>
+                <div className={styles.orgTooltipHeader}>
+                  <span className={styles.orgTooltipHeaderIcon}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="2" y="2" width="8" height="6" rx="1"/>
+                      <rect x="14" y="2" width="8" height="6" rx="1"/>
+                      <rect x="8" y="16" width="8" height="6" rx="1"/>
+                      <line x1="6" y1="8" x2="6" y2="12"/>
+                      <line x1="18" y1="8" x2="18" y2="12"/>
+                      <line x1="6" y1="12" x2="18" y2="12"/>
+                      <line x1="12" y1="12" x2="12" y2="16"/>
+                    </svg>
+                  </span>
+                  {role.name}
+                </div>
+                <div className={styles.orgTooltipBody}>
+                  {role.orgs.length > 0 ? (
+                    role.orgs.map((org, idx) => (
+                      <div key={idx} className={styles.orgTooltipItem}>
+                        <span className={styles.orgTooltipItemDot} />
+                        {org}
+                      </div>
+                    ))
+                  ) : (
+                    <div className={styles.orgTooltipEmpty}>暂无关联组织</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </header>
     </>
   );
