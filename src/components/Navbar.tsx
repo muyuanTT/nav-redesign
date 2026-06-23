@@ -549,15 +549,12 @@ export default function Navbar() {
         setProfileOpen(false);
         setRoleDropdownOpen(false);
       }
-      if (roleDropdownRef.current && !roleDropdownRef.current.contains(e.target as Node)) {
-        setRoleDropdownOpen(false);
-      }
     };
-    if (profileOpen || roleDropdownOpen) {
+    if (profileOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [profileOpen, roleDropdownOpen]);
+  }, [profileOpen]);
 
   const handleProfileMenuClick = (action: string) => {
     setProfileOpen(false);
@@ -833,13 +830,6 @@ export default function Navbar() {
         {/* Profile Dropdown */}
         {profileOpen && (
           <div className={styles.profileDropdown} ref={profileRef}>
-            <div className={styles.profileHeader}>
-              <img src="/logo2.png" alt="头像" className={styles.profileAvatar} />
-              <div className={styles.profileInfo}>
-                <span className={styles.profileName}>用户名：OP</span>
-                <span className={styles.profileAccount}>账号：GILLION</span>
-              </div>
-            </div>
             <div className={styles.profileDivider} />
             <div className={styles.profileRoleSection}>
               <div className={styles.profileRoleHeader}>
@@ -866,6 +856,9 @@ export default function Navbar() {
                     >
                       <span className={styles.roleDragHandle}>⋮⋮</span>
                       <span className={styles.roleName}>{role.name}</span>
+                      {currentRole === role.name && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.roleCheck}><polyline points="20 6 9 17 4 12"/></svg>
+                      )}
                       <span
                         className={styles.roleOrgIcon}
                         onMouseEnter={(e) => {
@@ -874,11 +867,16 @@ export default function Navbar() {
                         }}
                         onMouseLeave={() => setOrgTooltip(null)}
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <rect x="2" y="2" width="8" height="6" rx="1"/>
+                          <rect x="14" y="2" width="8" height="6" rx="1"/>
+                          <rect x="8" y="16" width="8" height="6" rx="1"/>
+                          <line x1="6" y1="8" x2="6" y2="12"/>
+                          <line x1="18" y1="8" x2="18" y2="12"/>
+                          <line x1="6" y1="12" x2="18" y2="12"/>
+                          <line x1="12" y1="12" x2="12" y2="16"/>
+                        </svg>
                       </span>
-                      {currentRole === role.name && (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.roleCheck}><polyline points="20 6 9 17 4 12"/></svg>
-                      )}
                     </div>
                   ))}
                 </div>
