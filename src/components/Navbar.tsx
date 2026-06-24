@@ -617,6 +617,9 @@ export default function Navbar() {
 
     // Build breadcrumb path
     if (currentItem) {
+      // 更新一级菜单选中状态，使选中条显示
+      setActiveMenu(currentItem.icon);
+
       // Check if it's a second-level menu (no children match)
       const isSecondLevel = currentItem.children?.some(sub => sub.label === label);
       if (isSecondLevel) {
