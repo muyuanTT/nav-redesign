@@ -850,6 +850,72 @@
   flex-shrink: 0;
 }
 
+/* ==================== Tooltip ==================== */
+.tooltipWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 9999;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  animation: tooltipIn 150ms ease forwards;
+}
+
+.tooltipTop {
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltipTop {
+  animation: tooltipInTop 150ms ease forwards;
+}
+
+@keyframes tooltipInTop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) translateY(0);
+  }
+}
+
+.tooltipArrow {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #1f2937;
+}
+
 /* ==================== Scrollbar ==================== */
 .nav::-webkit-scrollbar {
   width: 3px;

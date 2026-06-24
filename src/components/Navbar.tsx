@@ -1,7 +1,64 @@
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './Navbar.module.css';
+
+interface TooltipProps {
+  text: string;
+  children: React.ReactNode;
+}
+
+function Tooltip({ text, children }: TooltipProps) {
+  const [visible, setVisible] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0, placement: 'bottom' as 'top' | 'bottom' });
+  const ref = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const show = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      const tooltipHeight = 40;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const placement = spaceBelow > tooltipHeight + 10 ? 'bottom' : 'top';
+      setPos({
+        x: rect.left + rect.width / 2,
+        y: placement === 'bottom' ? rect.bottom : rect.top,
+        placement,
+      });
+    }
+    setVisible(true);
+  }, []);
+
+  const hide = useCallback(() => {
+    timeoutRef.current = setTimeout(() => setVisible(false), 100);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={styles.tooltipWrapper}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
+      {children}
+      {visible &&
+        createPortal(
+          <div
+            className={`${styles.tooltip} ${pos.placement === 'top' ? styles.tooltipTop : ''}`}
+            style={{ left: pos.x, top: pos.y }}
+            onMouseEnter={show}
+            onMouseLeave={hide}
+          >
+            <div className={styles.tooltipArrow} />
+            {text}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+}
 
 interface ThirdItem {
   label: string;
@@ -469,7 +526,7 @@ export default function Navbar() {
   const [pageTitle, setPageTitle] = useState('工作台');
   const [pageDesc, setPageDesc] = useState('查看今日业务概览、待办事项和关键指标');
   const [activeThirdMenu, setActiveThirdMenu] = useState<string | null>(null);
-  const [breadcrumb, setBreadcrumb] = useState<string[]>(['主页']);
+  const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [profileOpen, setProfileOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState('管理员');
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
@@ -537,7 +594,7 @@ export default function Navbar() {
     if (content) {
       setPageTitle(content.title);
       setPageDesc(content.desc);
-      setBreadcrumb(['主页', content.title]);
+      setBreadcrumb([content.title]);
     }
   };
 
@@ -624,7 +681,7 @@ export default function Navbar() {
       const isSecondLevel = currentItem.children?.some(sub => sub.label === label);
       if (isSecondLevel) {
         setActiveThirdMenu(null);
-        setBreadcrumb(['主页', currentItem.label, label]);
+        setBreadcrumb([currentItem.label, label]);
       } else {
         // It's a third-level menu
         setActiveThirdMenu(label);
@@ -632,9 +689,9 @@ export default function Navbar() {
           sub.children?.some(third => third.label === label)
         )?.label;
         if (secondLabel) {
-          setBreadcrumb(['主页', currentItem.label, secondLabel, label]);
+          setBreadcrumb([currentItem.label, secondLabel, label]);
         } else {
-          setBreadcrumb(['主页', currentItem.label, label]);
+          setBreadcrumb([currentItem.label, label]);
         }
       }
     }
@@ -800,26 +857,38 @@ export default function Navbar() {
         </div>
         <div className={styles.headerRight}>
           <div className={styles.iconGroup}>
-            <button className={`${styles.headerBtn} ${styles.headerBtnSm}`} title="即时通讯">
-              <img src="/icon/jishitongxun.svg" alt="即时通讯" width="22" height="22" />
-            </button>
-            <button className={`${styles.headerBtn} ${styles.headerBtnSm}`} title="操作手册">
-              <img src="/icon/caozuoshouce.svg" alt="操作手册" width="22" height="22" />
-            </button>
-            <button className={`${styles.headerBtn} ${styles.headerBtnSm}`} title="问答">
-              <img src="/icon/qa.svg" alt="问答" width="22" height="22" />
-            </button>
-            <button className={`${styles.headerBtn} ${styles.headerBtnSm}`} title="法律条款">
-              <img src="/icon/falvtiaokuan.svg" alt="法律条款" width="22" height="22" />
-            </button>
+            <Tooltip text="即时通讯">
+              <button className={`${styles.headerBtn} ${styles.headerBtnSm}`}>
+                <img src="/icon/jishitongxun.svg" alt="即时通讯" width="22" height="22" />
+              </button>
+            </Tooltip>
+            <Tooltip text="操作手册">
+              <button className={`${styles.headerBtn} ${styles.headerBtnSm}`}>
+                <img src="/icon/caozuoshouce.svg" alt="操作手册" width="22" height="22" />
+              </button>
+            </Tooltip>
+            <Tooltip text="问答">
+              <button className={`${styles.headerBtn} ${styles.headerBtnSm}`}>
+                <img src="/icon/qa.svg" alt="问答" width="22" height="22" />
+              </button>
+            </Tooltip>
+            <Tooltip text="法律条款">
+              <button className={`${styles.headerBtn} ${styles.headerBtnSm}`}>
+                <img src="/icon/falvtiaokuan.svg" alt="法律条款" width="22" height="22" />
+              </button>
+            </Tooltip>
           </div>
-          <button className={styles.headerBtn} title="消息">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-            <span className={styles.headerBadge}>5</span>
-          </button>
-          <button className={styles.headerBtn} title="中英文切换">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 010 20"/><path d="M12 2a15.3 15.3 0 000 20"/></svg>
-          </button>
+          <Tooltip text="消息">
+            <button className={styles.headerBtn}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              <span className={styles.headerBadge}>5</span>
+            </button>
+          </Tooltip>
+          <Tooltip text="中英文切换">
+            <button className={styles.headerBtn}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 010 20"/><path d="M12 2a15.3 15.3 0 000 20"/></svg>
+            </button>
+          </Tooltip>
           <div className={`${styles.userInfo} ${styles.userInfoClickable}`} onClick={toggleProfile}>
             <img src="/logo2.png" alt="头像" className={styles.avatar} />
             <div className={styles.userDetail}>
@@ -827,9 +896,11 @@ export default function Navbar() {
               <span className={styles.userAccount}>账号：GILLION</span>
             </div>
           </div>
-          <button className={`${styles.headerBtn} ${styles.arrowBtn}`} title="角色切换" onClick={toggleProfile}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={profileOpen ? styles.arrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
+          <Tooltip text="角色切换">
+            <button className={`${styles.headerBtn} ${styles.arrowBtn}`} onClick={toggleProfile}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={profileOpen ? styles.arrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </Tooltip>
         </div>
 
         {/* Profile Dropdown */}
