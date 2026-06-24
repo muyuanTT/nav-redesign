@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Navbar.module.css';
 
@@ -539,6 +539,131 @@ export default function Navbar() {
   const [orgTooltip, setOrgTooltip] = useState<{ roleId: number; x: number; y: number; arrowTop: number; isLeft: boolean } | null>(null);
   const [draggedRole, setDraggedRole] = useState<number | null>(null);
   const [dragOverRole, setDragOverRole] = useState<number | null>(null);
+  const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set(['海运报价', '客户列表']));
+
+  const toggleFavorite = useCallback((label: string) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(label)) {
+        next.delete(label);
+      } else {
+        next.add(label);
+      }
+      return next;
+    });
+  }, []);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchHistory, setSearchHistory] = useState<string[]>(['出口订舱', '库存查询', '对账管理']);
+  const [searchResults, setSearchResults] = useState<Array<{ label: string; path: string }>>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const allSearchableItems = useMemo(() => [
+    { label: '出口订舱', path: '/shipping/export/booking' },
+    { label: '进口到港', path: '/shipping/import/arrival' },
+    { label: '海运报价', path: '/shipping/quote' },
+    { label: '船期管理', path: '/shipping/schedule' },
+    { label: '空运订舱', path: '/air/booking' },
+    { label: '空运报价', path: '/air/quote' },
+    { label: '航班管理', path: '/air/flight' },
+    { label: '整车运输', path: '/land/ftl' },
+    { label: '零担运输', path: '/land/ltl' },
+    { label: '车辆管理', path: '/land/vehicle' },
+    { label: '入库管理', path: '/warehouse/inbound' },
+    { label: '出库管理', path: '/warehouse/outbound' },
+    { label: '库存查询', path: '/warehouse/stock' },
+    { label: '盘点管理', path: '/warehouse/count' },
+    { label: '全部订单', path: '/orders/all' },
+    { label: '待审核', path: '/orders/pending' },
+    { label: '进行中', path: '/orders/processing' },
+    { label: '已完成', path: '/orders/completed' },
+    { label: '客户列表', path: '/customers/list' },
+    { label: '合同管理', path: '/customers/contract' },
+    { label: '信用额度', path: '/customers/credit' },
+    { label: '业务统计', path: '/reports/business' },
+    { label: '营收分析', path: '/reports/revenue' },
+    { label: '操作报表', path: '/reports/operation' },
+    { label: '对账管理', path: '/finance/reconciliation' },
+    { label: '应收应付', path: '/finance/receivable' },
+    { label: '发票管理', path: '/finance/invoice' },
+    { label: '成本核算', path: '/finance/cost' },
+    { label: '组织架构', path: '/settings/org' },
+    { label: '用户权限', path: '/settings/permission' },
+    { label: '基础数据', path: '/settings/master' },
+    { label: '系统参数', path: '/settings/config' },
+    { label: '运价管理', path: '/rates/sea' },
+    { label: '报价管理', path: '/quotes/list' },
+    { label: '文件中心', path: '/finance/document' },
+    { label: '帮助中心', path: '/settings/help' },
+  ], []);
+
+  const handleSearch = useCallback((query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const results = allSearchableItems.filter(item =>
+      item.label.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(results);
+  }, [allSearchableItems]);
+
+  const handleSearchSubmit = useCallback((label: string) => {
+    setSearchHistory(prev => {
+      const filtered = prev.filter(item => item !== label);
+      return [label, ...filtered].slice(0, 5);
+    });
+    setSearchQuery('');
+    setSearchResults([]);
+    setSearchDrawerOpen(false);
+  }, []);
+
+  const handleClearHistory = useCallback(() => {
+    setSearchHistory([]);
+  }, []);
+
+  const getItemIcon = useCallback((label: string) => {
+    const iconMap: Record<string, string> = {
+      '海运报价': '🚢',
+      '客户列表': '👥',
+      '出口订舱': '📋',
+      '库存查询': '📦',
+      '对账管理': '💰',
+      '进口到港': '🚢',
+      '船期管理': '⏰',
+      '空运订舱': '✈️',
+      '航班管理': '✈️',
+      '整车运输': '🚛',
+      '零担运输': '📦',
+      '车辆管理': '🚗',
+      '入库管理': '📥',
+      '出库管理': '📤',
+      '盘点管理': '📊',
+      '全部订单': '📋',
+      '待审核': '⏳',
+      '进行中': '🔄',
+      '已完成': '✅',
+      '合同管理': '📄',
+      '信用额度': '💳',
+      '业务统计': '📈',
+      '营收分析': '💹',
+      '操作报表': '📊',
+      '应收应付': '💵',
+      '发票管理': '🧾',
+      '成本核算': '🧮',
+      '组织架构': '🏢',
+      '用户权限': '🔐',
+      '基础数据': '📚',
+      '系统参数': '⚙️',
+      '运价管理': '💲',
+      '报价管理': '📑',
+      '文件中心': '📁',
+      '帮助中心': '❓',
+    };
+    return iconMap[label] || '📌';
+  }, []);
+
   const navRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -711,7 +836,7 @@ export default function Navbar() {
 
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${mobileOpen ? styles.mobileOpen : ''}`}>
-        <div className={styles.sidebarSearch}>
+        <div className={styles.sidebarSearch} onClick={() => setSearchDrawerOpen(true)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <nav className={styles.nav} ref={navRef} aria-label="主菜单">
@@ -1066,6 +1191,124 @@ export default function Navbar() {
           );
         })()}
       </header>
+
+      {/* Search Drawer */}
+      {searchDrawerOpen && (
+        <>
+          <div className={styles.searchOverlay} onClick={() => setSearchDrawerOpen(false)} />
+          <div className={styles.searchDrawer}>
+            <div className={styles.searchDrawerHeader}>
+              <div className={styles.searchInputWrapper}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="搜索菜单、功能..."
+                  className={styles.searchInput}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    handleSearch(e.target.value);
+                  }}
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className={styles.searchDrawerBody}>
+              {searchQuery ? (
+                <div className={styles.searchSection}>
+                  <div className={styles.searchSectionTitle}>搜索结果 ({searchResults.length})</div>
+                  {searchResults.length > 0 ? (
+                    <div className={styles.searchSectionList}>
+                      {searchResults.map(item => (
+                        <div key={item.label} className={styles.searchItemRow}>
+                          <a
+                            href="#"
+                            className={styles.searchItem}
+                            onClick={(e) => { e.preventDefault(); handleSearchSubmit(item.label); }}
+                          >
+                            <span className={styles.searchItemIcon}>{getItemIcon(item.label)}</span>
+                            <span>{item.label}</span>
+                          </a>
+                          <button
+                            className={`${styles.favoriteBtn} ${favorites.has(item.label) ? styles.favoriteActive : ''}`}
+                            onClick={(e) => { e.stopPropagation(); toggleFavorite(item.label); }}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill={favorites.has(item.label) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className={styles.searchEmpty}>未找到匹配项</div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className={styles.searchSection}>
+                    <div className={styles.searchSectionTitle}>最近使用</div>
+                    <div className={styles.searchSectionList}>
+                      {searchHistory.map(label => (
+                        <div key={label} className={styles.searchItemRow}>
+                          <a
+                            href="#"
+                            className={styles.searchItem}
+                            onClick={(e) => { e.preventDefault(); handleSearchSubmit(label); }}
+                          >
+                            <span className={styles.searchItemIcon}>{getItemIcon(label)}</span>
+                            <span>{label}</span>
+                          </a>
+                          <button
+                            className={`${styles.favoriteBtn} ${favorites.has(label) ? styles.favoriteActive : ''}`}
+                            onClick={(e) => { e.stopPropagation(); toggleFavorite(label); }}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill={favorites.has(label) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                      {searchHistory.length === 0 && (
+                        <div className={styles.searchEmpty}>暂无搜索历史</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className={styles.searchSection}>
+                    <div className={styles.searchSectionTitle}>我的收藏</div>
+                    <div className={styles.searchSectionList}>
+                      {Array.from(favorites).map(label => (
+                        <div key={label} className={styles.searchItemRow}>
+                          <a
+                            href="#"
+                            className={styles.searchItem}
+                            onClick={(e) => { e.preventDefault(); handleSearchSubmit(label); }}
+                          >
+                            <span className={styles.searchItemIcon}>{getItemIcon(label)}</span>
+                            <span>{label}</span>
+                          </a>
+                          <button
+                            className={`${styles.favoriteBtn} ${styles.favoriteActive}`}
+                            onClick={(e) => { e.stopPropagation(); toggleFavorite(label); }}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                      {favorites.size === 0 && (
+                        <div className={styles.searchEmpty}>暂无收藏</div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
