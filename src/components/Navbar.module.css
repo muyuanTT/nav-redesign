@@ -93,9 +93,9 @@
 .activeIndicator {
   position: absolute;
   left: 0;
-  width: 3px;
+  width: 2px;
   background: #fff;
-  border-radius: 0 3px 3px 0;
+  border-radius: 0 2px 2px 0;
   transition: top 250ms cubic-bezier(0.4, 0, 0.2, 1), height 250ms cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
@@ -178,8 +178,9 @@
   font-size: 13px;
   color: rgba(255, 255, 255, 0.7);
   transition: all 150ms ease;
-  padding: 10px 8px 10px 16px;
+  padding: 10px 8px 10px 12px;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .cardGroupTitle:hover {
@@ -211,7 +212,7 @@
 }
 
 .cardAccordionOpen {
-  max-height: 200px;
+  max-height: 500px;
 }
 
 .cardAccordionInner {

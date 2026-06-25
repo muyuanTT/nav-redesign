@@ -102,20 +102,71 @@ const pageContents: Record<string, PageInfo> = {
 };
 
 const subPageContents: Record<string, PageInfo> = {
-  '出口订舱': { title: '出口订舱', desc: '创建和管理出口订舱单，支持整箱和拼箱' },
-  '进口到港': { title: '进口到港', desc: '进口货物到港预报、清关申报和提货安排' },
-  '海运报价': { title: '海运报价', desc: '海运运价查询、报价历史和费率管理' },
-  '船期管理': { title: '船期管理', desc: '船期查询、订阅和对比分析' },
-  '空运订舱': { title: '空运订舱', desc: '空运订舱新建、列表和舱位管理' },
-  '空运报价': { title: '空运报价', desc: '空运运价查询和报价对比' },
-  '航班管理': { title: '航班管理', desc: '航班时刻表和舱位监控' },
+  '地图': { title: '地图', desc: '业务数据地图可视化，全球航线与港口分布' },
+  '驾驶舱': { title: '驾驶舱', desc: '核心业务指标实时监控与数据分析' },
+  '工作台': { title: '工作台', desc: '个人工作台，快速处理待办事项' },
+  '海运委托': { title: '海运委托', desc: '海运委托管理，创建和跟踪海运委托单' },
+  '空运委托': { title: '空运委托', desc: '空运委托管理，创建和跟踪空运委托单' },
+  '铁路委托': { title: '铁路委托', desc: '铁路委托管理，创建和跟踪铁路委托单' },
+  '我的订单': { title: '我的订单', desc: '查看和管理所有委托订单' },
+  '我要对单': { title: '我要对单', desc: '对单管理，核对海运、空运、铁路对单' },
+  '财务费用': { title: '财务费用', desc: '财务费用管理，费用确认和发票管理' },
+  '我的地址': { title: '我的地址', desc: '管理收货和发货地址' },
+  '海运对单': { title: '海运对单', desc: '海运对单核对和管理' },
+  '空运对单': { title: '空运对单', desc: '空运对单核对和管理' },
+  '铁路对单': { title: '铁路对单', desc: '铁路对单核对和管理' },
+  '费用确认': { title: '费用确认', desc: '费用确认和审核' },
+  '发票管理': { title: '发票管理', desc: '发票开具、核销和税务报表' },
+  '内部订舱': { title: '内部订舱', desc: '内部订舱管理，统一调度订舱资源' },
+  '海运订舱': { title: '海运订舱', desc: '海运订舱管理，创建和跟踪海运订舱单' },
+  '空运订舱': { title: '空运订舱', desc: '空运订舱管理，创建和跟踪空运订舱单' },
+  '铁路订舱': { title: '铁路订舱', desc: '铁路订舱管理，创建和跟踪铁路订舱单' },
+  'CONSOL操作': { title: 'CONSOL操作', desc: '集装箱拼箱操作管理' },
+  '确认出运计划': { title: '确认出运计划', desc: '确认拼箱出运计划' },
+  'PO清单': { title: 'PO清单', desc: '采购订单清单管理' },
+  '内部操作权限设置': { title: '内部操作权限设置', desc: '设置内部操作权限' },
+  '仓库设置': { title: '仓库设置', desc: '仓库基础信息设置' },
+  '供应商设置': { title: '供应商设置', desc: '供应商基础信息设置' },
+  '客户编号设置': { title: '客户编号设置', desc: '客户编号规则设置' },
+  '箱型设置': { title: '箱型设置', desc: '集装箱型规格设置' },
+  '供应商表现统计': { title: '供应商表现统计', desc: '供应商绩效统计分析' },
+  '客户关系及偏好设置': { title: '客户关系及偏好设置', desc: '客户关系和偏好配置' },
+  '优选箱型设置': { title: '优选箱型设置', desc: '优选集装箱型配置' },
+  '挑货提醒设置': { title: '挑货提醒设置', desc: '挑货提醒规则设置' },
+  'LCL': { title: 'LCL', desc: '拼箱运价计算器' },
+  'SEA CALCULATOR CONFIG': { title: 'SEA CALCULATOR CONFIG', desc: '海运计算器配置' },
+  'AIR': { title: 'AIR', desc: '空运运价计算器' },
+  'AIR CALCULATOR CONFIG': { title: 'AIR CALCULATOR CONFIG', desc: '空运计算器配置' },
+  'SEA+AIR CALCULATOR CONFIG': { title: 'SEA+AIR CALCULATOR CONFIG', desc: '海空联运计算器配置' },
+  'SEA+AIR': { title: 'SEA+AIR', desc: '海空联运运价计算器' },
+  '拼箱池': { title: '拼箱池', desc: '拼箱货物池管理' },
+  '代理确认出运': { title: '代理确认出运', desc: '代理确认拼箱出运' },
+  'Mix Consol基础数据维护': { title: 'Mix Consol基础数据维护', desc: '拼箱基础数据维护' },
+  '拼箱部门权限维护': { title: '拼箱部门权限维护', desc: '拼箱部门权限管理' },
   '整车运输': { title: '整车运输', desc: '整车运输调度、线路管理和运费结算' },
   '零担运输': { title: '零担运输', desc: '零担货运受理、中转管理和末端配送' },
   '车辆管理': { title: '车辆管理', desc: '车辆档案、司机管理和GPS监控' },
-  '入库管理': { title: '入库管理', desc: '收货单管理、质检和上架操作' },
-  '出库管理': { title: '出库管理', desc: '拣货任务、复核打包和发货确认' },
-  '库存查询': { title: '库存查询', desc: '库存总览、明细查询和库存预警' },
-  '盘点管理': { title: '盘点管理', desc: '盘点任务、执行和差异处理' },
+  '电商确认': { title: '电商确认', desc: '电商订舱确认管理，海运、空运、铁路订舱确认' },
+  '委托单': { title: '委托单', desc: '委托单管理，海运、空运、铁路委托单列表' },
+  '海运订舱': { title: '海运订舱', desc: '海运订舱管理，舱位预定、销售和管理' },
+  '空运订舱': { title: '空运订舱', desc: '空运订舱管理，订舱确认和舱位管理' },
+  'Booking Desk': { title: 'Booking Desk', desc: 'Booking Desk管理，SI查询和集量维护' },
+  '海运订舱确认': { title: '海运订舱确认', desc: '海运电商订舱确认' },
+  '空运订舱确认': { title: '空运订舱确认', desc: '空运电商订舱确认' },
+  '铁路订舱确认': { title: '铁路订舱确认', desc: '铁路电商订舱确认' },
+  '海运委托单列表': { title: '海运委托单列表', desc: '海运委托单列表查看和管理' },
+  '空运委托单列表': { title: '空运委托单列表', desc: '空运委托单列表查看和管理' },
+  '铁路委托单列表': { title: '铁路委托单列表', desc: '铁路委托单列表查看和管理' },
+  '订舱管理': { title: '订舱管理', desc: '订舱单创建、编辑和跟踪管理' },
+  '舱位预定': { title: '舱位预定', desc: '集装箱舱位预定管理' },
+  '舱位管理': { title: '舱位管理', desc: '集装箱舱位状态和管理' },
+  '舱位销售管理': { title: '舱位销售管理', desc: '舱位销售策略和管理' },
+  '船公司运价Filing确认': { title: '船公司运价Filing确认', desc: '船公司运价Filing确认管理' },
+  '订舱确认': { title: '订舱确认', desc: '订舱确认管理' },
+  'SI查询': { title: 'SI查询', desc: 'SI信息查询管理' },
+  '集量维护': { title: '集量维护', desc: '集量数据维护管理' },
+  'LTD维护': { title: 'LTD维护', desc: 'LTD数据维护管理' },
+  '权限维护': { title: '权限维护', desc: '权限配置和管理' },
   '全部订单': { title: '全部订单', desc: '查看所有订单，支持筛选和导出' },
   '待审核': { title: '待审核订单', desc: '审核待处理的订单，批准或驳回' },
   '进行中': { title: '进行中订单', desc: '跟踪执行中的订单和处理异常' },
@@ -137,71 +188,77 @@ const subPageContents: Record<string, PageInfo> = {
 };
 
 const menuItems: MenuItem[] = [
-  { icon: 'home', label: '主页', href: '/dashboard' },
+  {
+    icon: 'home',
+    label: '主页',
+    href: '/dashboard',
+    children: [
+      { label: '地图', href: '/dashboard/map', desc: '业务数据地图可视化' },
+      { label: '驾驶舱', href: '/dashboard/cockpit', desc: '核心指标驾驶舱' },
+      { label: '工作台', href: '/dashboard/workbench', desc: '个人工作台' },
+    ],
+  },
   {
     icon: 'ship',
     label: '我要订舱',
     children: [
-      { label: '出口订舱', href: '/shipping/export/booking', desc: '创建和管理出口订舱单', children: [
-        { label: '整箱订舱', href: '/shipping/export/fcl' },
-        { label: '拼箱订舱', href: '/shipping/export/lcl' },
-        { label: '批量导入', href: '/shipping/export/batch' },
-        { label: '订舱模板', href: '/shipping/export/template' },
+      { label: '海运委托', href: '/shipping/sea', desc: '海运委托管理' },
+      { label: '空运委托', href: '/shipping/air', desc: '空运委托管理' },
+      { label: '铁路委托', href: '/shipping/rail', desc: '铁路委托管理' },
+      { label: '我的订单', href: '/shipping/orders', desc: '我的订单列表' },
+      { label: '我要对单', href: '/shipping/reconciliation', desc: '对单管理', children: [
+        { label: '海运对单', href: '/shipping/reconciliation/sea' },
+        { label: '空运对单', href: '/shipping/reconciliation/air' },
+        { label: '铁路对单', href: '/shipping/reconciliation/rail' },
       ]},
-      { label: '进口到港', href: '/shipping/import/arrival', desc: '进口货物到港管理', children: [
-        { label: '到港预报', href: '/shipping/import/forecast' },
-        { label: '清关申报', href: '/shipping/import/customs' },
-        { label: '提货安排', href: '/shipping/import/delivery' },
+      { label: '财务费用', href: '/shipping/finance', desc: '财务费用管理', children: [
+        { label: '费用确认', href: '/shipping/finance/confirm' },
+        { label: '发票管理', href: '/shipping/finance/invoice' },
       ]},
-      { label: '海运报价', href: '/shipping/quote', desc: '海运运价与报价', children: [
-        { label: '运价查询', href: '/shipping/quote/search' },
-        { label: '报价历史', href: '/shipping/quote/history' },
-        { label: '费率管理', href: '/shipping/quote/rate' },
-      ]},
-      { label: '船期管理', href: '/shipping/schedule', desc: '船期表与维护', children: [
-        { label: '船期查询', href: '/shipping/schedule/search' },
-        { label: '船期订阅', href: '/shipping/schedule/subscribe' },
-        { label: '船期对比', href: '/shipping/schedule/compare' },
-      ]},
+      { label: '我的地址', href: '/shipping/address', desc: '我的地址管理' },
     ],
   },
   {
     icon: 'plane',
     label: '内部订舱',
     children: [
-      { label: '空运订舱', href: '/air/booking', desc: '空运订舱与跟踪', children: [
-        { label: '新建订舱', href: '/air/booking/new' },
-        { label: '订舱列表', href: '/air/booking/list' },
-        { label: '舱位管理', href: '/air/booking/space' },
-      ]},
-      { label: '空运报价', href: '/air/quote', desc: '空运运价管理', children: [
-        { label: '运价查询', href: '/air/quote/search' },
-        { label: '报价对比', href: '/air/quote/compare' },
-      ]},
-      { label: '航班管理', href: '/air/flight', desc: '航班时刻与舱位', children: [
-        { label: '航班时刻表', href: '/air/flight/schedule' },
-        { label: '舱位监控', href: '/air/flight/monitor' },
-      ]},
+      { label: '内部订舱', href: '/air/internal', desc: '内部订舱管理' },
+      { label: '海运订舱', href: '/air/sea', desc: '海运订舱管理' },
+      { label: '空运订舱', href: '/air/air', desc: '空运订舱管理' },
+      { label: '铁路订舱', href: '/air/rail', desc: '铁路订舱管理' },
     ],
   },
   {
     icon: 'consol',
     label: 'Consol',
     children: [
-      { label: '整车运输', href: '/land/ftl', desc: '整车运输调度', children: [
-        { label: '调度派车', href: '/land/ftl/dispatch' },
-        { label: '线路管理', href: '/land/ftl/route' },
-        { label: '运费结算', href: '/land/ftl/settle' },
+      { label: 'MY iCONSOLBOX', href: '/consol/iconbox', desc: 'CONSOL操作与设置', children: [
+        { label: 'CONSOL操作', href: '/consol/iconbox/operation' },
+        { label: '确认出运计划', href: '/consol/iconbox/plan' },
+        { label: 'PO清单', href: '/consol/iconbox/po' },
+        { label: '内部操作权限设置', href: '/consol/iconbox/permission' },
+        { label: '仓库设置', href: '/consol/iconbox/warehouse' },
+        { label: '供应商设置', href: '/consol/iconbox/supplier' },
+        { label: '客户编号设置', href: '/consol/iconbox/customer' },
+        { label: '箱型设置', href: '/consol/iconbox/container' },
+        { label: '供应商表现统计', href: '/consol/iconbox/performance' },
+        { label: '客户关系及偏好设置', href: '/consol/iconbox/preference' },
+        { label: '优选箱型设置', href: '/consol/iconbox/prefer-container' },
+        { label: '挑货提醒设置', href: '/consol/iconbox/alert' },
       ]},
-      { label: '零担运输', href: '/land/ltl', desc: '零担货运管理', children: [
-        { label: '货物受理', href: '/land/ltl/accept' },
-        { label: '中转管理', href: '/land/ltl/transfer' },
-        { label: '末端配送', href: '/land/ltl/delivery' },
+      { label: 'ICONSOL CALCULATOR', href: '/consol/calculator', desc: '运价计算器', children: [
+        { label: 'LCL', href: '/consol/calculator/lcl' },
+        { label: 'SEA CALCULATOR CONFIG', href: '/consol/calculator/sea-config' },
+        { label: 'AIR', href: '/consol/calculator/air' },
+        { label: 'AIR CALCULATOR CONFIG', href: '/consol/calculator/air-config' },
+        { label: 'SEA+AIR CALCULATOR CONFIG', href: '/consol/calculator/sea-air-config' },
+        { label: 'SEA+AIR', href: '/consol/calculator/sea-air' },
       ]},
-      { label: '车辆管理', href: '/land/vehicle', desc: '车辆与司机', children: [
-        { label: '车辆档案', href: '/land/vehicle/archive' },
-        { label: '司机管理', href: '/land/vehicle/driver' },
-        { label: 'GPS监控', href: '/land/vehicle/gps' },
+      { label: 'Mix Consol', href: '/consol/mix', desc: '拼箱管理', children: [
+        { label: '拼箱池', href: '/consol/mix/pool' },
+        { label: '代理确认出运', href: '/consol/mix/confirm' },
+        { label: 'Mix Consol基础数据维护', href: '/consol/mix/master' },
+        { label: '拼箱部门权限维护', href: '/consol/mix/dept-permission' },
       ]},
     ],
   },
@@ -209,25 +266,34 @@ const menuItems: MenuItem[] = [
     icon: 'warehouse',
     label: '操作中心',
     children: [
-      { label: '入库管理', href: '/warehouse/inbound', desc: '收货/质检/上架', children: [
-        { label: '收货单', href: '/warehouse/inbound/receipt' },
-        { label: '质检', href: '/warehouse/inbound/qc' },
-        { label: '上架', href: '/warehouse/inbound/putaway' },
+      { label: '电商确认', href: '/warehouse/ecommerce', desc: '电商订舱确认管理', children: [
+        { label: '海运订舱确认', href: '/warehouse/ecommerce/sea' },
+        { label: '空运订舱确认', href: '/warehouse/ecommerce/air' },
+        { label: '铁路订舱确认', href: '/warehouse/ecommerce/rail' },
       ]},
-      { label: '出库管理', href: '/warehouse/outbound', desc: '拣货/复核/发货', children: [
-        { label: '拣货任务', href: '/warehouse/outbound/pick' },
-        { label: '复核打包', href: '/warehouse/outbound/check' },
-        { label: '发货确认', href: '/warehouse/outbound/ship' },
+      { label: '委托单', href: '/warehouse/orders', desc: '委托单管理', children: [
+        { label: '海运委托单列表', href: '/warehouse/orders/sea' },
+        { label: '空运委托单列表', href: '/warehouse/orders/air' },
+        { label: '铁路委托单列表', href: '/warehouse/orders/rail' },
       ]},
-      { label: '库存查询', href: '/warehouse/stock', desc: '实时库存', children: [
-        { label: '库存总览', href: '/warehouse/stock/overview' },
-        { label: '库存明细', href: '/warehouse/stock/detail' },
-        { label: '库存预警', href: '/warehouse/stock/alert' },
+      { label: '海运订舱', href: '/warehouse/sea-booking', desc: '海运订舱管理', children: [
+        { label: '订舱管理', href: '/warehouse/sea-booking/manage' },
+        { label: '舱位预定', href: '/warehouse/sea-booking/reserve' },
+        { label: '舱位管理', href: '/warehouse/sea-booking/space' },
+        { label: '舱位销售管理', href: '/warehouse/sea-booking/sales' },
+        { label: '船公司运价Filing确认', href: '/warehouse/sea-booking/filing' },
       ]},
-      { label: '盘点管理', href: '/warehouse/count', desc: '库存盘点', children: [
-        { label: '盘点任务', href: '/warehouse/count/task' },
-        { label: '盘点执行', href: '/warehouse/count/execute' },
-        { label: '差异处理', href: '/warehouse/count/diff' },
+      { label: '空运订舱', href: '/warehouse/air-booking', desc: '空运订舱管理', children: [
+        { label: '订舱管理', href: '/warehouse/air-booking/manage' },
+        { label: '订舱确认', href: '/warehouse/air-booking/confirm' },
+        { label: '舱位管理', href: '/warehouse/air-booking/space' },
+      ]},
+      { label: 'Booking Desk', href: '/warehouse/booking-desk', desc: 'Booking Desk管理', children: [
+        { label: 'Booking Desk', href: '/warehouse/booking-desk/desk' },
+        { label: 'SI查询', href: '/warehouse/booking-desk/si' },
+        { label: '集量维护', href: '/warehouse/booking-desk/volume' },
+        { label: 'LTD维护', href: '/warehouse/booking-desk/ltd' },
+        { label: '权限维护', href: '/warehouse/booking-desk/permission' },
       ]},
     ],
   },
@@ -540,7 +606,7 @@ export default function Navbar() {
   const [draggedRole, setDraggedRole] = useState<number | null>(null);
   const [dragOverRole, setDragOverRole] = useState<number | null>(null);
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set(['海运报价', '客户列表']));
+  const [favorites, setFavorites] = useState<Set<string>>(new Set(['海运委托', '我的订单']));
 
   const toggleFavorite = useCallback((label: string) => {
     setFavorites(prev => {
@@ -555,7 +621,7 @@ export default function Navbar() {
   }, []);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchHistory, setSearchHistory] = useState<string[]>(['出口订舱', '库存查询', '对账管理']);
+  const [searchHistory, setSearchHistory] = useState<string[]>(['海运委托', '我的订单', '对账管理']);
   const [searchResults, setSearchResults] = useState<Array<{ label: string; path: string }>>([]);
   const [indicatorTop, setIndicatorTop] = useState(0);
   const [indicatorHeight, setIndicatorHeight] = useState(56);
@@ -563,20 +629,27 @@ export default function Navbar() {
   const navRef = useRef<HTMLDivElement>(null);
 
   const allSearchableItems = useMemo(() => [
-    { label: '出口订舱', path: '/shipping/export/booking' },
-    { label: '进口到港', path: '/shipping/import/arrival' },
-    { label: '海运报价', path: '/shipping/quote' },
-    { label: '船期管理', path: '/shipping/schedule' },
+    { label: '海运委托', path: '/shipping/sea' },
+    { label: '空运委托', path: '/shipping/air' },
+    { label: '铁路委托', path: '/shipping/rail' },
+    { label: '我的订单', path: '/shipping/orders' },
+    { label: '我要对单', path: '/shipping/reconciliation' },
+    { label: '财务费用', path: '/shipping/finance' },
+    { label: '我的地址', path: '/shipping/address' },
     { label: '空运订舱', path: '/air/booking' },
     { label: '空运报价', path: '/air/quote' },
     { label: '航班管理', path: '/air/flight' },
-    { label: '整车运输', path: '/land/ftl' },
-    { label: '零担运输', path: '/land/ltl' },
-    { label: '车辆管理', path: '/land/vehicle' },
-    { label: '入库管理', path: '/warehouse/inbound' },
-    { label: '出库管理', path: '/warehouse/outbound' },
-    { label: '库存查询', path: '/warehouse/stock' },
-    { label: '盘点管理', path: '/warehouse/count' },
+    { label: '内部订舱', path: '/air/internal' },
+    { label: '海运订舱', path: '/air/sea' },
+    { label: '空运订舱', path: '/air/air' },
+    { label: '铁路订舱', path: '/air/rail' },
+    { label: 'CONSOL操作', path: '/consol/iconbox/operation' },
+    { label: '拼箱池', path: '/consol/mix/pool' },
+    { label: '电商确认', path: '/warehouse/ecommerce' },
+    { label: '委托单', path: '/warehouse/orders' },
+    { label: '海运订舱', path: '/warehouse/sea-booking' },
+    { label: '空运订舱', path: '/warehouse/air-booking' },
+    { label: 'Booking Desk', path: '/warehouse/booking-desk' },
     { label: '全部订单', path: '/orders/all' },
     { label: '待审核', path: '/orders/pending' },
     { label: '进行中', path: '/orders/processing' },
@@ -628,6 +701,13 @@ export default function Navbar() {
 
   const getItemIcon = useCallback((label: string) => {
     const iconMap: Record<string, string> = {
+      '海运委托': '🚢',
+      '空运委托': '✈️',
+      '铁路委托': '🚂',
+      '我的订单': '📋',
+      '我要对单': '📝',
+      '财务费用': '💰',
+      '我的地址': '📍',
       '海运报价': '🚢',
       '客户列表': '👥',
       '出口订舱': '📋',
@@ -663,6 +743,47 @@ export default function Navbar() {
       '报价管理': '📑',
       '文件中心': '📁',
       '帮助中心': '❓',
+      '海运对单': '📝',
+      '空运对单': '📝',
+      '铁路对单': '📝',
+      '费用确认': '✅',
+      '发票管理': '🧾',
+      '内部订舱': '✈️',
+      '海运订舱': '🚢',
+      '铁路订舱': '🚂',
+      'CONSOL操作': '📦',
+      '确认出运计划': '📋',
+      'PO清单': '📄',
+      '仓库设置': '🏭',
+      '供应商设置': '🚚',
+      '客户编号设置': '🔢',
+      '箱型设置': '📐',
+      '供应商表现统计': '📊',
+      '拼箱池': '🧩',
+      '代理确认出运': '✅',
+      'Mix Consol基础数据维护': '📚',
+      '拼箱部门权限维护': '🔐',
+      '电商确认': '✅',
+      '委托单': '📋',
+      '海运订舱': '🚢',
+      '空运订舱': '✈️',
+      'Booking Desk': '🖥️',
+      '海运订舱确认': '✅',
+      '空运订舱确认': '✅',
+      '铁路订舱确认': '✅',
+      '海运委托单列表': '📋',
+      '空运委托单列表': '📋',
+      '铁路委托单列表': '📋',
+      '订舱管理': '📝',
+      '舱位预定': '📦',
+      '舱位管理': '📦',
+      '舱位销售管理': '💰',
+      '船公司运价Filing确认': '📄',
+      '订舱确认': '✅',
+      'SI查询': '🔍',
+      '集量维护': '📊',
+      'LTD维护': '📈',
+      '权限维护': '🔐',
     };
     return iconMap[label] || '📌';
   }, []);
@@ -729,7 +850,7 @@ export default function Navbar() {
   };
 
   const handleMenuClick = (key: string, label: string) => {
-    // 一级菜单点击时不切换选中条
+    setActiveMenu(key);
     setActiveThirdMenu(null);
     const content = pageContents[key];
     if (content) {
@@ -813,22 +934,23 @@ export default function Navbar() {
       setPageDesc(content.desc);
     }
 
-    // Build breadcrumb path
     if (currentItem) {
       // 检查是否是二级菜单且有三级子菜单
       const secondLevelSub = currentItem.children?.find(sub => sub.label === label);
       const isSecondWithChildren = secondLevelSub && secondLevelSub.children && secondLevelSub.children.length > 0;
 
       if (isSecondWithChildren) {
-        // 二级菜单且有三级子菜单：不切换选中条
+        // 二级菜单且有三级子菜单：不切换选中条，只展开/折叠
         setActiveThirdMenu(null);
         setBreadcrumb([currentItem.label, label]);
       } else {
-        // 三级菜单或没有子菜单的二级菜单（叶子节点）：切换选中条
+        // 叶子节点（三级菜单 或 没有子菜单的二级菜单）：切换选中条
         setActiveMenu(currentItem.icon);
+
         const isThirdLevel = currentItem.children?.some(sub =>
           sub.children?.some(third => third.label === label)
         );
+
         if (isThirdLevel) {
           setActiveThirdMenu(label);
           const secondLabel = currentItem.children?.find(sub =>
@@ -840,7 +962,7 @@ export default function Navbar() {
             setBreadcrumb([currentItem.label, label]);
           }
         } else {
-          // 没有子菜单的二级菜单（叶子节点）
+          // 没有子菜单的二级菜单（叶子节点）：如地图、驾驶舱、工作台
           setActiveThirdMenu(null);
           setBreadcrumb([currentItem.label, label]);
         }
@@ -921,15 +1043,17 @@ export default function Navbar() {
                 <div key={sub.label} className={styles.cardGroup}>
                   <div
                     className={`${styles.cardGroupTitle} ${hasActiveThird ? styles.cardGroupTitleActive : ''}`}
-                    onClick={() => sub.children && sub.children.length > 0 && handleSubClick(sub.label)}
+                    onClick={() => {
+                      if (sub.children && sub.children.length > 0) {
+                        handleSubClick(sub.label);
+                      } else {
+                        handlePageClick(sub.label);
+                      }
+                    }}
                   >
-                    <a
-                      href="#"
-                      className={styles.cardGroupTitleText}
-                      onClick={(e) => { e.preventDefault(); handlePageClick(sub.label); }}
-                    >
+                    <span className={styles.cardGroupTitleText}>
                       {sub.label}
-                    </a>
+                    </span>
                     {sub.badge && (
                       <span className={styles.cardBadge}>{sub.badge}</span>
                     )}
