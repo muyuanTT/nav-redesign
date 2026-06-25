@@ -518,7 +518,7 @@ const iconSvg: Record<string, React.ReactNode> = {
 };
 
 export default function Navbar() {
-  const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [expandedSub, setExpandedSub] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
