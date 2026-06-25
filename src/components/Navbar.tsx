@@ -729,7 +729,7 @@ export default function Navbar() {
   };
 
   const handleMenuClick = (key: string, label: string) => {
-    setActiveMenu(key);
+    // 一级菜单点击时不切换选中条
     setActiveThirdMenu(null);
     const content = pageContents[key];
     if (content) {
@@ -815,23 +815,33 @@ export default function Navbar() {
 
     // Build breadcrumb path
     if (currentItem) {
-      // 更新一级菜单选中状态，使选中条显示
-      setActiveMenu(currentItem.icon);
+      // 检查是否是二级菜单且有三级子菜单
+      const secondLevelSub = currentItem.children?.find(sub => sub.label === label);
+      const isSecondWithChildren = secondLevelSub && secondLevelSub.children && secondLevelSub.children.length > 0;
 
-      // Check if it's a second-level menu (no children match)
-      const isSecondLevel = currentItem.children?.some(sub => sub.label === label);
-      if (isSecondLevel) {
+      if (isSecondWithChildren) {
+        // 二级菜单且有三级子菜单：不切换选中条
         setActiveThirdMenu(null);
         setBreadcrumb([currentItem.label, label]);
       } else {
-        // It's a third-level menu
-        setActiveThirdMenu(label);
-        const secondLabel = currentItem.children?.find(sub =>
+        // 三级菜单或没有子菜单的二级菜单（叶子节点）：切换选中条
+        setActiveMenu(currentItem.icon);
+        const isThirdLevel = currentItem.children?.some(sub =>
           sub.children?.some(third => third.label === label)
-        )?.label;
-        if (secondLabel) {
-          setBreadcrumb([currentItem.label, secondLabel, label]);
+        );
+        if (isThirdLevel) {
+          setActiveThirdMenu(label);
+          const secondLabel = currentItem.children?.find(sub =>
+            sub.children?.some(third => third.label === label)
+          )?.label;
+          if (secondLabel) {
+            setBreadcrumb([currentItem.label, secondLabel, label]);
+          } else {
+            setBreadcrumb([currentItem.label, label]);
+          }
         } else {
+          // 没有子菜单的二级菜单（叶子节点）
+          setActiveThirdMenu(null);
           setBreadcrumb([currentItem.label, label]);
         }
       }
