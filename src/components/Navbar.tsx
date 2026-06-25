@@ -557,7 +557,10 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>(['出口订舱', '库存查询', '对账管理']);
   const [searchResults, setSearchResults] = useState<Array<{ label: string; path: string }>>([]);
+  const [indicatorTop, setIndicatorTop] = useState(0);
+  const [indicatorHeight, setIndicatorHeight] = useState(56);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const allSearchableItems = useMemo(() => [
     { label: '出口订舱', path: '/shipping/export/booking' },
@@ -664,12 +667,25 @@ export default function Navbar() {
     return iconMap[label] || '📌';
   }, []);
 
-  const navRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const roleDropdownRef = useRef<HTMLDivElement>(null);
   const orgTooltipRef = useRef<HTMLDivElement>(null);
+
+  // 更新选中条位置和高度
+  useEffect(() => {
+    const activeIndex = menuItems.findIndex(item => item.icon === activeMenu);
+    if (activeIndex >= 0 && navRef.current) {
+      const navItems = navRef.current.querySelectorAll('[data-nav-item]');
+      if (navItems[activeIndex]) {
+        const itemRect = navItems[activeIndex].getBoundingClientRect();
+        const navRect = navRef.current.getBoundingClientRect();
+        setIndicatorTop(itemRect.top - navRect.top);
+        setIndicatorHeight(itemRect.height);
+      }
+    }
+  }, [activeMenu]);
   const orgLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = useCallback((key: string, el: HTMLAnchorElement | null) => {
@@ -840,13 +856,19 @@ export default function Navbar() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <nav className={styles.nav} ref={navRef} aria-label="主菜单">
+          {activeMenu && (
+            <div
+              className={styles.activeIndicator}
+              style={{ top: indicatorTop, height: indicatorHeight }}
+            />
+          )}
           {menuItems.map((item) => {
             const isActive = activeMenu === item.icon;
             const isHovered = hoveredMenu === item.icon;
             const hasChildren = !!item.children;
 
             return (
-              <div key={item.icon} className={styles.navGroup}>
+              <div key={item.icon} className={styles.navGroup} data-nav-item>
                 <a
                   ref={(el) => { itemRefs.current[item.icon] = el; }}
                   href="#"
@@ -884,10 +906,11 @@ export default function Navbar() {
           <div className={styles.cardPanelInner}>
             {currentItem.children.map((sub) => {
               const isSubExpanded = expandedSub === sub.label;
+              const hasActiveThird = activeThirdMenu && sub.children?.some(third => third.label === activeThirdMenu);
               return (
                 <div key={sub.label} className={styles.cardGroup}>
                   <div
-                    className={styles.cardGroupTitle}
+                    className={`${styles.cardGroupTitle} ${hasActiveThird ? styles.cardGroupTitleActive : ''}`}
                     onClick={() => sub.children && sub.children.length > 0 && handleSubClick(sub.label)}
                   >
                     <a
@@ -1005,13 +1028,17 @@ export default function Navbar() {
           </div>
           <Tooltip text="消息">
             <button className={styles.headerBtn}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              <span className={styles.headerBtnAnim}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              </span>
               <span className={styles.headerBadge}>5</span>
             </button>
           </Tooltip>
           <Tooltip text="中英文切换">
             <button className={styles.headerBtn}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 010 20"/><path d="M12 2a15.3 15.3 0 000 20"/></svg>
+              <span className={styles.headerBtnLang}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 010 20"/><path d="M12 2a15.3 15.3 0 000 20"/></svg>
+              </span>
             </button>
           </Tooltip>
           <div className={`${styles.userInfo} ${styles.userInfoClickable}`} onClick={toggleProfile}>
@@ -1021,11 +1048,9 @@ export default function Navbar() {
               <span className={styles.userAccount}>账号：GILLION</span>
             </div>
           </div>
-          <Tooltip text="角色切换">
-            <button className={`${styles.headerBtn} ${styles.arrowBtn}`} onClick={toggleProfile}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={profileOpen ? styles.arrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-          </Tooltip>
+          <button className={`${styles.headerBtn} ${styles.arrowBtn}`} onClick={toggleProfile}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={profileOpen ? styles.arrowOpen : ''}><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
         </div>
 
         {/* Profile Dropdown */}
