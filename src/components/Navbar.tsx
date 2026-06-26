@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import styles from './Navbar.module.css';
 
 interface TooltipProps {
@@ -580,6 +581,7 @@ const iconSvg: Record<string, React.ReactNode> = {
 };
 
 export default function Navbar() {
+  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [expandedSub, setExpandedSub] = useState<string | null>(null);
@@ -848,6 +850,10 @@ export default function Navbar() {
       setPageDesc(content.desc);
       setBreadcrumb([content.title]);
     }
+    // 一级菜单点击导航
+    if (key === 'home') {
+      router.push('/dashboard');
+    }
   };
 
   const toggleProfile = () => {
@@ -955,6 +961,12 @@ export default function Navbar() {
           // 没有子菜单的二级菜单（叶子节点）：如地图、驾驶舱、工作台
           setActiveThirdMenu(null);
           setBreadcrumb([currentItem.label, label]);
+        }
+
+        // 导航到对应页面
+        const currentIcon = currentItem.icon;
+        if (currentIcon === 'home' && label === '地图') {
+          router.push('/dashboard/map');
         }
       }
     }
