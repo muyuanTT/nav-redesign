@@ -901,9 +901,46 @@
   background: #f5f7fa;
 }
 
-.profileMenuItem svg {
-  color: var(--text-gray);
+.profileMenuIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+/* 个人设置 - 齿轮旋转 */
+.profileMenuItem:nth-child(1):hover .profileMenuIcon {
+  animation: gearSpin 400ms ease;
+}
+
+@keyframes gearSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(90deg); }
+}
+
+/* 修改密码 - 锁扣开合 */
+.profileMenuItem:nth-child(2):hover .lockShackle {
+  animation: shackleOpen 400ms ease;
+  transform-origin: 12px 11px;
+}
+
+@keyframes shackleOpen {
+  0% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-4px) rotate(-20deg); }
+  60% { transform: translateY(-4px) rotate(-20deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* 退出登录 - 横线和箭头绑定在一起移动 */
+.profileMenuItem:nth-child(3):hover .logoutGroup {
+  animation: logoutMove 500ms ease;
+}
+
+@keyframes logoutMove {
+  0% { transform: translateX(0); }
+  40% { transform: translateX(10px); }
+  41% { transform: translateX(-8px); }
+  100% { transform: translateX(0); }
 }
 
 /* ==================== Tooltip ==================== */
